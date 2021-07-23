@@ -4,8 +4,8 @@
     "module": "ESNext",
     "target": "es2020",
     "lib": ["DOM", "DOM.Iterable", "ESNext"],
-    "allowJs": false,
-    "skipLibCheck": false,
+    "allowJs": true,
+    "skipLibCheck": true,
     "esModuleInterop": true,
     "strict": true,
     "forceConsistentCasingInFileNames": true,
@@ -19,12 +19,6 @@
       "~/*": ["src/*"]
     }
   },
-  "exclude": [
-    "node_modules",
-    "node_modules/@types/*",
-    "dist",
-    "generated",
-    "test"
-  ],
+  "exclude": ["node_modules", "node_modules/@types/*", "dist", "generated", "test"],
   "include": ["./src"]
 }
