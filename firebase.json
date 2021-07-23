@@ -1,6 +1,5 @@
 {
   "hosting": {
-    "target": "line-liff",
     "public": "dist",
     "ignore": ["firebase.json", "**/.*", "**/node_modules/**"]
   }
