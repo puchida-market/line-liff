@@ -1,0 +1,7 @@
+{
+  "projects": {
+    "default": "puchida-develop",
+    "develop": "puchida-develop",
+    "production": "puchida-production"
+  }
+}
