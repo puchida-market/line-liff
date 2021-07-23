@@ -1,5 +1,7 @@
 {
-  "version": "0.0.0",
+  "name": "line-liff",
+  "author": "Puchida Co., Ltd.",
+  "private": true,
   "scripts": {
     "dev": "vite",
     "build": "tsc && vite build",
@@ -51,5 +53,8 @@
       "prettier --write",
       "eslint --max-warnings=0 --cache --fix"
     ]
+  },
+  "engines": {
+    "node": ">=14"
   }
 }
