@@ -3,5 +3,14 @@
     "default": "puchida-develop",
     "develop": "puchida-develop",
     "production": "puchida-production"
+  },
+  "targets": {
+    "puchida-develop": {
+      "hosting": {
+        "line-liff": [
+          "puchida-liff"
+        ]
+      }
+    }
   }
 }
