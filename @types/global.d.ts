@@ -2,9 +2,8 @@
 // https://www.typescriptlang.org/docs/handbook/declaration-merging.html#merging-interfaces
 
 interface Window {
-  _laq: any
   Cypress: any
-  nookies: any
+  firebase: any
 }
 
 declare module '*.gql' {

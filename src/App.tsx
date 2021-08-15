@@ -1,6 +1,6 @@
-import React, { useEffect, useState } from 'react'
+import { useEffect, useState } from 'react'
+import { useCookieConsent } from 'use-cookie-consent'
 import liff from '@line/liff'
-import './App.css'
 
 declare global {
   interface Window {
@@ -15,61 +15,54 @@ interface LineProfile {
   email?: string | undefined
 }
 
-// const liff = window.liff
-
 function App() {
   const [userProfile, setUserProfile] = useState<LineProfile>({})
+  const { consent, acceptAllCookies } = useCookieConsent()
 
   useEffect(() => {
     if (liff) {
       ;(async () => {
-        try {
-          await liff?.init({ liffId: '1655232598-75GlOzq5' })
-        } catch (error) {
-          console.error('liff init error', error.message)
+        await liff?.init({ liffId: '1655232598-75GlOzq5' })
+        if (!liff?.isLoggedIn()) {
+          liff?.login()
+          return
         }
 
-        if (liff?.isLoggedIn()) {
-          console.log('login')
-          console.log(liff)
-          await liff.ready
-          let getProfile: LineProfile = await liff.getProfile()
-          const email = liff.getDecodedIDToken()?.email
-          console.log(getProfile)
-          setUserProfile({ ...getProfile, email })
-        } else {
-          liff?.login()
-        }
+        console.log(liff)
+        await liff.ready
+        const token = liff.getAccessToken()
+        console.log(token)
+        // TODO: add loading screen
+        let getProfile: LineProfile = await liff.getProfile()
+        const email = liff.getDecodedIDToken()?.email
+        console.log(getProfile)
+        setUserProfile({ ...getProfile, email })
+        // TODO: remove loading screen
       })()
     }
   }, [])
 
-  // const showDisplayName = () => {
-  //   if (!isLoggedIn) {
-  //     return (
-  //       <button className="App-button" onClick={() => liff.login()}>
-  //         Login
-  //       </button>
-  //     )
-  //   }
-  //   return (
-  //     <>
-  //       <p>Welcome to the react-liff demo app, {displayName}!</p>
-  //       <button className="App-button" onClick={() => liff.logout()}>
-  //         Logout
-  //       </button>
-  //     </>
-  //   )
-  // }
+  function logOut(): void {
+    window?.liff.logout()
+    window.location.reload()
+  }
 
   return (
     <div className="App">
       <header className="App-header">
         <p>Name: {userProfile?.displayName}</p>
-        <p>Line ID: {userProfile?.userId}</p>
+        <p>LID: {userProfile?.userId}</p>
         <p>Email: {userProfile?.email}</p>
         <img alt="pic" src={userProfile?.pictureUrl} />
+        <button className="px-8 py-2 font-bold text-center text-gray-700 bg-gray-50 hover:red-700" id="btnLogOut" onClick={() => logOut()}>
+          Log out
+        </button>
       </header>
+      <footer className="w-full bg-gray-50">
+        <h3>Cookie: {consent.firstParty ? 'Accepted' : 'Rejected'}</h3>
+        <p>{JSON.stringify(consent)}</p>
+        {!consent.firstParty && <button onClick={() => acceptAllCookies()}>Accept All Cookies</button>}
+      </footer>
     </div>
   )
 }
