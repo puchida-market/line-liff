@@ -44,8 +44,6 @@ function App(): JSX.Element {
       }
 
       await liff.ready
-      const idToken = liff.getIDToken()
-      console.log(idToken)
       try {
         const toastId = toast.loading('กำลังโหลดข้อมูล')
         const result = await client.get('/linkAccountStatus', {
