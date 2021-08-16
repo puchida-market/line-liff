@@ -7,7 +7,7 @@ module.exports = {
     extend: {
       fontWeight: ['hover', 'focus'],
       fontFamily: {
-        sans: ['Inter var', ...defaultTheme.fontFamily.sans],
+        sans: ['Mitr', ...defaultTheme.fontFamily.sans],
       },
     },
   },

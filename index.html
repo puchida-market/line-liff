@@ -2,22 +2,21 @@
 <html lang="th">
   <head>
     <meta charset="utf-8" />
-    <link rel="icon" type="image/svg+xml" href="/src/favicon.svg" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover, user-scalable=no" />
     <meta name="theme-color" content="#b22222" />
+    <link rel="icon" type="image/svg+xml" href="/src/favicon.svg" />
+    <!-- Google Bot -->
+    <meta name="robots" content="index,follow" />
+    <meta name="googlebot" content="index,follow" />
+    <meta name="google" content="notranslate" />
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-    <!-- <link href="https://fonts.googleapis.com/css?family=Kanit:300,400,500,600,700&display=swap&amp;subset=thai" rel="stylesheet" /> -->
-    <!-- <link href="https://fonts.googleapis.com/css2?family=Sarabun:wght@200;400&display=swap" rel="stylesheet" /> -->
-    <title>Puchida Line Channel</title>
+    <title>Miss Puchida</title>
+    <script src="https://static.line-scdn.net/liff/edge/2.1/sdk.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/pvdbsmf@1.0.0/dist/pvdbsmf.min.js" defer></script>
   </head>
   <body>
     <div id="root"></div>
-    <form method="POST">
-      <input type="hidden" name="line" id="line" />
-      <button id="submit" submit="" type="submit"></button>
-    </form>
-    <script src="https://static.line-scdn.net/liff/edge/2.1/sdk.js"></script>
     <script type="module" src="/src/main.tsx"></script>
   </body>
 </html>

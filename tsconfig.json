@@ -10,10 +10,12 @@
     "isolatedModules": true,
     "jsx": "react-jsx",
     "lib": ["dom", "dom.iterable", "esnext"],
+    "types": ["vite/client"],
     "module": "esnext",
     "moduleResolution": "node",
     "noEmit": true,
     "noFallthroughCasesInSwitch": true,
+    "noUnusedLocals": true,
     "noUnusedParameters": true,
     "noImplicitReturns": true,
     "resolveJsonModule": true,
@@ -23,9 +25,9 @@
     "typeRoots": ["@types", "node_modules/@types"],
     "baseUrl": "./src",
     "paths": {
-      "~/*": ["*"]
+      "@/*": ["*"]
     }
   },
   "exclude": ["node_modules", "node_modules/@types/*", "dist", "generated", "test"],
-  "include": ["**/*.ts", "**/*.tsx", "./src"]
+  "include": ["./src", "@types/**/*.d.ts"]
 }

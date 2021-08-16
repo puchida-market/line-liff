@@ -1,0 +1,8 @@
+**/node_modules/*
+**/dist/*
+test/*
+generated/*
+cypress/*
+public/*
+.eslintrc.js
+tailwind.config.js

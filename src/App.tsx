@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react'
+import { useEffect, useState } from 'react'
 import liff from '@line/liff'
 import logo from './logo.svg'
 
@@ -9,39 +9,38 @@ interface LineProfile {
   email: string | undefined
 }
 
-function App() {
+function App(): JSX.Element {
   const [userProfile, setUserProfile] = useState<LineProfile | null>(null)
 
   useEffect(() => {
-    if (liff) {
-      async function checkLogin() {
-        await liff?.init({ liffId: '1655232598-75GlOzq5' })
-        if (!liff?.isLoggedIn()) {
-          liff?.login()
-          return
-        }
-
-        console.log(liff)
-        await liff.ready
-        const token = liff.getAccessToken()
-        console.log(token)
-        const idToken = liff.getIDToken()
-        console.log(idToken)
-        // TODO: add loading screen
-        let getProfile = await liff.getProfile()
-        const email = liff.getDecodedIDToken()?.email
-        console.log(getProfile)
-        setUserProfile({ ...getProfile, email })
-        // TODO: remove loading screen
+    const checkLogin = async () => {
+      await liff?.init({ liffId: '1655232598-75GlOzq5' })
+      if (!liff?.isLoggedIn()) {
+        liff?.login()
+        return
       }
+
+      console.log(liff)
+      await liff.ready
+      const token = liff.getAccessToken()
+      console.log(token)
+      const idToken = liff.getIDToken()
+      console.log(idToken)
+      // TODO: add loading screen
+      const getProfile = await liff.getProfile()
+      const email = liff.getDecodedIDToken()?.email
+      console.log(getProfile)
+      setUserProfile({ ...getProfile, email })
+      // TODO: remove loading screen
+    }
+    if (liff) {
       checkLogin()
     }
   }, [])
 
-  async function logOut(): Promise<void> {
+  function close(): void {
     if (liff) {
-      liff.logout()
-      window.location.reload()
+      liff.closeWindow()
     }
   }
 
@@ -61,7 +60,7 @@ function App() {
           <p>Email: {userProfile?.email}</p>
         </div>
         <h3 className="text-lg font-medium text-warm-gray-900">กรอกหมายเลขมือถือ</h3>
-        <form className="max-w-sm px-6 space-y-4">
+        <form className="flex-1 h-full max-w-sm px-6 space-y-4">
           <div>
             <label htmlFor="phone-number" className="sr-only">
               Phone Number
@@ -100,8 +99,8 @@ function App() {
           </div>
         </form>
         <footer className="mt-auto">
-          <button className="px-8 py-2 font-bold text-center text-gray-700 bg-gray-300 shadow hover:bg-gray-700" id="btnLogOut" onClick={() => logOut()}>
-            Log out
+          <button className="px-8 py-2 font-bold text-center text-gray-700 bg-gray-300 shadow hover:bg-gray-700" id="btnLogOut" onClick={() => close()}>
+            ปิดหน้านี้
           </button>
         </footer>
       </div>

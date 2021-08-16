@@ -12,21 +12,12 @@ declare module '*.gql' {
   const Schema: DocumentNode
   export = Schema
 }
-declare module '*.png' {
-  const resource: string
-  export = resource
+declare module '*.pdf' {
+  const src: string
+  export default src
 }
 
+declare module '*.png'
+declare module '*.jpg'
+declare module '*.json'
 declare module '*.svg'
-declare module '*.css' {
-  const resource: any
-  export = resource
-}
-declare module '*.pcss' {
-  const resource: string
-  export = resource
-}
-declare module '*.json' {
-  const resource: any
-  export = resource
-}
