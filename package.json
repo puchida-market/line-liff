@@ -15,6 +15,7 @@
     "axios": "^0.21.1",
     "firebase": "^9.0.0-beta.8",
     "firebase-tools": "^9.16.5",
+    "firebaseui": "^4.8.1",
     "global": "^4.4.0",
     "graphql": "^15.5.1",
     "graphql-tag": "^2.12.5",

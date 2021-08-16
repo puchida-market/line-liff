@@ -4,6 +4,7 @@
 interface Window {
   Cypress: any
   firebase: any
+  liff: any
 }
 
 declare module '*.gql' {
@@ -15,10 +16,8 @@ declare module '*.png' {
   const resource: string
   export = resource
 }
-declare module '*.svg' {
-  const resource: string
-  export = resource
-}
+
+declare module '*.svg'
 declare module '*.css' {
   const resource: any
   export = resource
