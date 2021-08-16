@@ -10,7 +10,7 @@
     "isolatedModules": true,
     "jsx": "preserve",
     "lib": ["dom", "dom.iterable", "esnext"],
-    "types": ["vite/client"],
+    "types": ["vite/client", "@types/webappsec-credential-management"],
     "module": "esnext",
     "moduleResolution": "node",
     "noEmit": true,
@@ -22,12 +22,12 @@
     "skipLibCheck": true,
     "strict": true,
     "target": "es2020",
-    "typeRoots": ["@types", "node_modules/@types"],
+    "typeRoots": ["src/@types", "node_modules/@types"],
     "baseUrl": "./src",
     "paths": {
       "@/*": ["*"]
     }
   },
   "exclude": ["node_modules", "node_modules/@types/*", "dist", "generated", "test"],
-  "include": ["./src", "@types/**/*.d.ts"]
+  "include": ["./src", "src/@types/**/*.d.ts"]
 }
