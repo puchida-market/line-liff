@@ -21,7 +21,6 @@ function App(): JSX.Element {
         return
       }
 
-      console.log(liff)
       await liff.ready
       const token = liff.getAccessToken()
       console.log(token)

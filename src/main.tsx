@@ -1,4 +1,4 @@
-import React from 'react'
+import { StrictMode, Suspense } from 'react'
 import { hydrate, render } from 'react-dom'
 import './tailwind.css'
 import App from './App'
@@ -6,13 +6,13 @@ import LoadingIndicator from './components/LoadingIndicator'
 import { HelmetProvider } from 'react-helmet-async'
 
 const appComponent: JSX.Element = (
-  <React.StrictMode>
+  <StrictMode>
     <HelmetProvider>
-      <React.Suspense fallback={<LoadingIndicator />}>
+      <Suspense fallback={<LoadingIndicator />}>
         <App />
-      </React.Suspense>
+      </Suspense>
     </HelmetProvider>
-  </React.StrictMode>
+  </StrictMode>
 )
 
 const rootElement = document.getElementById('root')

@@ -1,5 +1,3 @@
-import React from 'react'
-
 export default function LandingIndicator(): JSX.Element {
   return (
     <div className="grid w-full h-full min-h-screen grid-cols-1 grid-rows-1 text-gray-900 place-items-center">
