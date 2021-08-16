@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react'
 import liff from '@line/liff'
 import logo from './logo.svg'
+import countries from './data/countries.json'
 import { Helmet } from 'react-helmet-async'
 
 interface LineProfile {
@@ -69,17 +70,24 @@ function App(): JSX.Element {
               <label htmlFor="phone-number" className="sr-only">
                 Phone Number
               </label>
-              <div className="relative mt-1 rounded-md shadow-sm">
-                <div className="absolute inset-y-0 left-0 flex items-center">
+              <div className="relative mt-1 rounded">
+                <div className="absolute inset-y-0 left-0 flex items-center border-r border-gray-300">
                   <label htmlFor="country" className="sr-only">
                     Country
                   </label>
                   <select
                     id="country"
                     name="country"
-                    className="h-full py-0 pl-3 text-gray-700 bg-transparent border-transparent rounded-md focus:ring-0 focus:border-transparent pr-7 sm:text-sm"
+                    defaultValue="+66"
+                    className="h-full py-0 pl-3 pr-3 text-gray-700 bg-transparent border-transparent rounded focus:ring-0 focus:border-transparent sm:text-sm"
                   >
-                    <option>+66</option>
+                    {countries.map((country) => {
+                      return (
+                        <option key={country.isoCode} value={country.dialCode}>
+                          {country.isoCode} {country.dialCode}
+                        </option>
+                      )
+                    })}
                   </select>
                 </div>
                 <input
@@ -88,7 +96,7 @@ function App(): JSX.Element {
                   name="phone-number"
                   id="phone-number"
                   maxLength={10}
-                  className="block w-full pl-16 border-gray-300 placeholder-gray-300 tracking-wider rounded-md focus:ring-[#b22222] focus:border-[#b22222] sm:text-sm"
+                  className="block w-full pl-28 border-gray-300 placeholder-gray-300 tracking-wider rounded focus:ring-[#b22222] focus:border-[#b22222] sm:text-sm"
                   placeholder="081 111 1111"
                 />
               </div>
@@ -96,14 +104,18 @@ function App(): JSX.Element {
             <div>
               <button
                 type="submit"
-                className="inline-flex items-center justify-center px-12 py-2 text-base font-medium text-white shadow bg-[#820002] border border-transparent rounded hover:bg-[#3b0d00]"
+                className="inline-flex items-center justify-center px-12 py-3 text-base font-medium text-white shadow bg-[#820002] border border-transparent rounded hover:bg-[#3b0d00]"
               >
                 ขอรหัส OTP
               </button>
             </div>
           </form>
           <footer className="mt-auto">
-            <button className="px-8 py-2 font-bold text-center text-gray-700 bg-gray-300 shadow hover:bg-gray-700" id="btnLogOut" onClick={() => close()}>
+            <button
+              className="px-8 py-3 font-bold text-center text-gray-700 bg-gray-300 rounded shadow hover:bg-gray-700"
+              id="btnLogOut"
+              onClick={() => close()}
+            >
               ปิดหน้านี้
             </button>
           </footer>
