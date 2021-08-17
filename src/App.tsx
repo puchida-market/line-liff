@@ -15,7 +15,7 @@ interface LineProfile {
 }
 
 const client = axios.create({
-  baseURL: 'http://localhost:5001/puchida-develop/asia-southeast1',
+  baseURL: process.env['REACT_APP_CLOUD_FUNCTIONS_URL'],
 })
 
 function App(): JSX.Element {
@@ -23,8 +23,8 @@ function App(): JSX.Element {
   const [userProfile, setUserProfile] = useState<LineProfile | null>(null)
   const [hasLinkAccount, setHasLinkAccount] = useState<boolean>(false)
   const [hasRequestOtp, setHasRequestOtp] = useState<boolean>(false)
-  const [showLinkAccount, setShowLinkAccount] = useState<boolean>(true)
-  const [phoneNumber, setPhoneNumber] = useState<string>('0863613535')
+  const [showLinkAccount, setShowLinkAccount] = useState<boolean>(false)
+  const [phoneNumber, setPhoneNumber] = useState<string>('')
   const [otpNumber, setOtpNumber] = useState<string>('')
   const [responseSid, setResponseSid] = useState<string>('')
   const [countryCode, setCountryCode] = useState<string>('+66')
@@ -42,29 +42,29 @@ function App(): JSX.Element {
         liff?.login()
         return
       }
-
+      // TODO: add loading screen
       await liff.ready
+      const getProfile = await liff.getProfile()
+      const email = liff.getDecodedIDToken()?.email
+      setUserProfile({ ...getProfile, email })
+      const idToken = liff.getIDToken()
       try {
-        const toastId = toast.loading('กำลังโหลดข้อมูล')
         const result = await client.get('/linkAccountStatus', {
           headers: {
-            Authorization: `Bearer ${liff.getIDToken()}`,
+            Authorization: `Bearer ${idToken}`,
           },
         })
-        toast.dismiss(toastId)
         if (result.status === 200) {
           setHasLinkAccount(true)
+          setShowLinkAccount(true)
         }
       } catch (error) {
         if (error instanceof Error) {
           console.error(error)
           toast.error(error.message)
+          return
         }
       }
-      // TODO: add loading screen
-      const getProfile = await liff.getProfile()
-      const email = liff.getDecodedIDToken()?.email
-      setUserProfile({ ...getProfile, email })
       // TODO: remove loading screen
     }
     if (liff) {
@@ -150,6 +150,12 @@ function App(): JSX.Element {
       if (result?.data?.success) {
         toast.success('เชื่อมต่อบัญชีสำเร็จ', { id: toastId })
         setHasLinkAccount(true)
+        liff.sendMessages([
+          {
+            type: 'text',
+            text: 'คุณได้เชื่อมต่อบัญชี Line กับ ปูชิดา เรียบร้อย 😊',
+          },
+        ])
       } else {
         toast.error(result?.data?.message, { id: toastId })
       }
@@ -164,19 +170,17 @@ function App(): JSX.Element {
   function close(): void {
     if (liff) {
       liff.closeWindow()
-      liff.logout()
-      window.location.reload()
     }
   }
 
   return (
     <>
       <Helmet>
-        <title>Puchida Link Account</title>
+        <title>Miss Puchida</title>
       </Helmet>
-      <div className="h-screen bg-white">
+      <div className="h-screen overflow-hidden bg-white">
         <div className="flex flex-col px-6 py-12 mx-auto space-y-4 text-center">
-          <section className="flex flex-col items-center justify-center flex-1 h-full space-y-2">
+          <section className="flex flex-col items-center justify-center space-y-2">
             <div className="flex justify-center">
               <img src={logo} alt="logo" className="object-cover" width={120} />
             </div>
@@ -194,7 +198,7 @@ function App(): JSX.Element {
             ) : (
               <img
                 className="inline-block w-24 h-24 bg-gray-100 rounded-full"
-                src={userProfile?.pictureUrl ?? './assets/default.png'}
+                src={userProfile?.pictureUrl ?? '/images/default.png'}
                 alt="line profile image"
               />
             )}
@@ -301,8 +305,8 @@ function App(): JSX.Element {
             </section>
           )}
         </div>
-        <footer className="fixed bottom-0 w-full mb-8 text-center">
-          <button className="px-8 py-3 font-bold text-center text-gray-700 bg-gray-300 rounded shadow hover:bg-gray-700" id="btnLogOut" onClick={() => close()}>
+        <footer className="fixed bottom-0 w-full mb-4 text-center safe-area-bottom">
+          <button className="btn-light" onClick={() => close()}>
             ปิดหน้านี้
           </button>
         </footer>
