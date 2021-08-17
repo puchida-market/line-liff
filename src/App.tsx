@@ -14,10 +14,6 @@ interface LineProfile {
   email: string | undefined
 }
 
-const client = axios.create({
-  baseURL: process.env['REACT_APP_CLOUD_FUNCTIONS_URL'],
-})
-
 function App(): JSX.Element {
   const otpInput = useRef<HTMLInputElement>(null)
   const [userProfile, setUserProfile] = useState<LineProfile | null>(null)
@@ -49,7 +45,7 @@ function App(): JSX.Element {
       setUserProfile({ ...getProfile, email })
       const idToken = liff.getIDToken()
       try {
-        const result = await client.get('/linkAccountStatus', {
+        const result = await axios.get(`${process.env['REACT_APP_CLOUD_FUNCTIONS_URL']}/linkAccountStatus`, {
           headers: {
             Authorization: `Bearer ${idToken}`,
           },
@@ -105,7 +101,7 @@ function App(): JSX.Element {
   async function requestOtp(e: MouseEvent<HTMLButtonElement, globalThis.MouseEvent>): Promise<void> {
     e.preventDefault()
     const toastId = toast.loading('กำลังส่งคำขอ OTP')
-    const result = await client.post('/requestOtp', {
+    const result = await axios.post(`${process.env['REACT_APP_CLOUD_FUNCTIONS_URL']}/requestOtp`, {
       phoneNumber: `${countryCode}${phoneNumber}`,
     })
     if (result?.data?.success) {
@@ -120,7 +116,7 @@ function App(): JSX.Element {
 
   async function verifyOtp(): Promise<void> {
     const toastId = toast.loading('ระบบกำลังตรวจสอบ OTP')
-    const result = await client.post('/verifyOtp', {
+    const result = await axios.post(`${process.env['REACT_APP_CLOUD_FUNCTIONS_URL']}/verifyOtp`, {
       sid: responseSid,
       otp: otpNumber,
     })
@@ -136,8 +132,8 @@ function App(): JSX.Element {
     e.preventDefault()
     const toastId = toast.loading('กำลังเชื่อมต่อบัญชีปูชิดา โปรดรอซักครู่')
     try {
-      const result = await client.post(
-        '/linkLineAccount',
+      const result = await axios.post(
+        `${process.env['REACT_APP_CLOUD_FUNCTIONS_URL']}/linkLineAccount`,
         {
           phoneNumber,
         },
