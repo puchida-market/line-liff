@@ -1,8 +1,8 @@
-name: Deploy to Preview Channel
+name: Deploy to Production
 on:
   push:
     branches:
-      - production
+      - main
 env:
   CI: true
   RECAPTCHA_SITE_SECRET: "6Lc0mXwaAAAAAAllRoZlUf5M3DyhUizGidWdxl0X"
