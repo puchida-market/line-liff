@@ -12,7 +12,7 @@ if (!window.firebase) {
     projectId: 'react-firebase-farazamiruddin',
     storageBucket: 'react-firebase-farazamiruddin.appspot.com',
     messagingSenderId: '338564911587',
-    appId: '1:338564911587:web:c34e6fee0ff41bbe7fd0d6',
+    appId: '1:338564911587:web:c34e6fee0ff41bbe7fd0d6'
   })
   ;(window as any).firebase = firebaseClient
   auth = getAuth(firebaseClient)
