@@ -8,7 +8,7 @@
     "experimentalDecorators": true,
     "forceConsistentCasingInFileNames": true,
     "isolatedModules": true,
-    "jsx": "preserve",
+    "jsx": "react",
     "lib": ["dom", "dom.iterable", "esnext"],
     "types": ["vite/client", "node", "@types/webappsec-credential-management"],
     "module": "esnext",
@@ -25,9 +25,35 @@
     "typeRoots": ["src/@types", "node_modules/@types"],
     "baseUrl": "./src",
     "paths": {
-      "@/*": ["*"]
+      "@pages": ["./pages/index.tsx"],
+      "@pages/*": ["./pages/*"],
+      "@layouts": ["./layouts/index.ts"],
+      "@layouts/*": ["./layouts/*"],
+      "@components": ["./components/index.ts"],
+      "@components/*": ["./components/*"],
+      "@styles/*": ["./styles/*"],
+      "@services": ["./services/index.ts"],
+      "@services/*": ["./services/*"],
+      "@models": ["./models/*"],
+      "@models/*": ["./models/*"],
+      "@stores": ["./stores/index.ts"],
+      "@stores/*": ["./stores/*"],
+      "@libs": ["./libs/index.ts"],
+      "@libs/*": ["./libs/*"],
+      "@utils": ["./utils/index.ts"],
+      "@utils/*": ["./utils/*"],
+      "@context": ["./context/index.ts"],
+      "@context/*": ["./context/*"],
+      "@data": ["./data/index.ts"],
+      "@data/*": ["./data/*"]
     }
   },
-  "exclude": ["node_modules", "node_modules/@types/*", "dist", "generated", "test"],
+  "exclude": [
+    "node_modules",
+    "node_modules/@types/*",
+    "dist",
+    "generated",
+    "test"
+  ],
   "include": ["./src", "src/@types/**/*.d.ts"]
 }
