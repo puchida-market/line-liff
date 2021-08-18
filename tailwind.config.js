@@ -2,14 +2,15 @@ const defaultTheme = require('tailwindcss/defaultTheme')
 
 module.exports = {
   mode: 'jit',
-  purge: ['./index.html', './src/**/*.{js,ts,jsx,tsx}'],
+  purge: ['./src/**/*.[j|t]s[x]'],
+  darkMode: 'class',
   theme: {
     extend: {
       fontWeight: ['hover', 'focus'],
       fontFamily: {
-        sans: ['Mitr', ...defaultTheme.fontFamily.sans],
-      },
-    },
+        sans: ['Mitr', ...defaultTheme.fontFamily.sans]
+      }
+    }
   },
   variants: {},
   plugins: [
@@ -17,6 +18,6 @@ module.exports = {
     require('@tailwindcss/typography'),
     require('@tailwindcss/aspect-ratio'),
     require('@tailwindcss/line-clamp'),
-    require('tailwindcss-debug-screens'),
-  ],
+    require('tailwindcss-debug-screens')
+  ]
 }

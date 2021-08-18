@@ -1,4 +1,5 @@
 import { useEffect, useRef, useState, MouseEvent } from 'react'
+import Loading from '@components/LoadingIndicator'
 import liff from '@line/liff'
 import logo from './logo.svg'
 import countries from './data/countries.json'
@@ -19,6 +20,7 @@ function App(): JSX.Element {
   const [userProfile, setUserProfile] = useState<LineProfile | null>(null)
   const [hasLinkAccount, setHasLinkAccount] = useState<boolean>(false)
   const [hasRequestOtp, setHasRequestOtp] = useState<boolean>(false)
+  const [showLanding, setShowLanding] = useState<boolean>(false)
   const [showLinkAccount, setShowLinkAccount] = useState<boolean>(false)
   const [phoneNumber, setPhoneNumber] = useState<string>('')
   const [otpNumber, setOtpNumber] = useState<string>('')
@@ -38,18 +40,20 @@ function App(): JSX.Element {
         liff?.login()
         return
       }
-      // TODO: add loading screen
       await liff.ready
       const getProfile = await liff.getProfile()
       const email = liff.getDecodedIDToken()?.email
       setUserProfile({ ...getProfile, email })
       const idToken = liff.getIDToken()
       try {
-        const result = await axios.get(`${import.meta.env.VITE_CLOUD_FUNCTIONS_URL}/linkAccountStatus`, {
-          headers: {
-            Authorization: `Bearer ${idToken}`,
-          },
-        })
+        const result = await axios.get(
+          `${import.meta.env.VITE_CLOUD_FUNCTIONS_URL}/linkAccountStatus`,
+          {
+            headers: {
+              Authorization: `Bearer ${idToken}`
+            }
+          }
+        )
         if (result.status === 200) {
           setHasLinkAccount(true)
           setShowLinkAccount(true)
@@ -60,6 +64,8 @@ function App(): JSX.Element {
           toast.error(error.message)
           return
         }
+      } finally {
+        setShowLanding(true)
       }
       // TODO: remove loading screen
     }
@@ -84,7 +90,7 @@ function App(): JSX.Element {
         navigator.credentials
           .get({
             otp: { transport: ['sms'] },
-            signal: ac.signal,
+            signal: ac.signal
           })
           .then((otp) => {
             setOtpNumber(String(otp?.code))
@@ -98,28 +104,40 @@ function App(): JSX.Element {
     }
   }, [])
 
-  async function requestOtp(e: MouseEvent<HTMLButtonElement, globalThis.MouseEvent>): Promise<void> {
+  async function requestOtp(
+    e: MouseEvent<HTMLButtonElement, globalThis.MouseEvent>
+  ): Promise<void> {
     e.preventDefault()
     const toastId = toast.loading('กำลังส่งคำขอ OTP')
-    const result = await axios.post(`${import.meta.env.VITE_CLOUD_FUNCTIONS_URL}/requestOtp`, {
-      phoneNumber: `${countryCode}${phoneNumber}`,
-    })
+    const result = await axios.post(
+      `${import.meta.env.VITE_CLOUD_FUNCTIONS_URL}/requestOtp`,
+      {
+        phoneNumber: `${countryCode}${phoneNumber}`
+      }
+    )
     if (result?.data?.success) {
       setResponseSid(result?.data?.message?.sid)
-      toast.success(`ส่งรหัส OTP ไปที่หมายเลข ${phoneNumber} โปรดตรวจสอบ SMS`, { id: toastId })
+      toast.success(`ส่งรหัส OTP ไปที่หมายเลข ${phoneNumber} โปรดตรวจสอบ SMS`, {
+        id: toastId
+      })
       setHasRequestOtp(true)
       otpInput?.current?.focus()
     } else {
-      toast.error('ส่งรหัส OTP ล้มเหลว โปรดตรวจสอบหมายเลขมือถือ', { id: toastId })
+      toast.error('ส่งรหัส OTP ล้มเหลว โปรดตรวจสอบหมายเลขมือถือ', {
+        id: toastId
+      })
     }
   }
 
   async function verifyOtp(): Promise<void> {
     const toastId = toast.loading('ระบบกำลังตรวจสอบ OTP')
-    const result = await axios.post(`${import.meta.env.VITE_CLOUD_FUNCTIONS_URL}/verifyOtp`, {
-      sid: responseSid,
-      otp: otpNumber,
-    })
+    const result = await axios.post(
+      `${import.meta.env.VITE_CLOUD_FUNCTIONS_URL}/verifyOtp`,
+      {
+        sid: responseSid,
+        otp: otpNumber
+      }
+    )
     if (result?.data?.success) {
       toast.success(`ยืนยันหมายเลขมือถือสำเร็จ`, { id: toastId })
       setShowLinkAccount(true)
@@ -128,29 +146,38 @@ function App(): JSX.Element {
     }
   }
 
-  async function linkAccount(e: MouseEvent<HTMLButtonElement, globalThis.MouseEvent>): Promise<void> {
+  async function linkAccount(
+    e: MouseEvent<HTMLButtonElement, globalThis.MouseEvent>
+  ): Promise<void> {
     e.preventDefault()
     const toastId = toast.loading('กำลังเชื่อมต่อบัญชีปูชิดา โปรดรอซักครู่')
     try {
       const result = await axios.post(
         `${import.meta.env.VITE_CLOUD_FUNCTIONS_URL}/linkLineAccount`,
         {
-          phoneNumber,
+          phoneNumber
         },
         {
           headers: {
-            Authorization: `Bearer ${liff.getIDToken()}`,
-          },
+            Authorization: `Bearer ${liff.getIDToken()}`
+          }
         }
       )
-      if (result?.data?.success) {
+      if (result.status === 204) {
+        toast.error(
+          'ไม่พบบัญชีนี้ในปูชิดา โปรดแน่ใจว่าได้กรอกเบอร์มือถือในบัญชีปูชิดาแล้ว',
+          { id: toastId }
+        )
+        return
+      }
+      if (result?.status === 200) {
         toast.success('เชื่อมต่อบัญชีสำเร็จ', { id: toastId })
         setHasLinkAccount(true)
         liff.sendMessages([
           {
             type: 'text',
-            text: 'คุณได้เชื่อมต่อบัญชี Line กับ ปูชิดา เรียบร้อย 😊',
-          },
+            text: 'คุณได้เชื่อมต่อบัญชี Line กับ ปูชิดา เรียบร้อย 😊'
+          }
         ])
       } else {
         toast.error(result?.data?.message, { id: toastId })
@@ -174,16 +201,34 @@ function App(): JSX.Element {
       <Helmet>
         <title>Miss Puchida</title>
       </Helmet>
-      <div className="h-screen overflow-hidden bg-white">
+      {!showLanding && (
+        <div className="min-h-screen overflow-hidden bg-white ">
+          <Loading />
+        </div>
+      )}
+      <div
+        className={`${
+          showLanding ? 'block' : 'hidden'
+        } min-h-screen overflow-hidden bg-white`}
+      >
         <div className="flex flex-col px-6 py-12 mx-auto space-y-4 text-center">
           <section className="flex flex-col items-center justify-center space-y-2">
             <div className="flex justify-center">
               <img src={logo} alt="logo" className="object-cover" width={120} />
             </div>
-            <h2 className="py-4 text-2xl font-bold text-gray-700">{hasLinkAccount ? 'เชื่อมบัญชี Line สำเร็จ' : 'เชื่อมบัญชี Line ไปที่ปูชิดา'}</h2>
+            <h2 className="py-4 text-2xl font-bold text-gray-700">
+              {hasLinkAccount
+                ? 'เชื่อมบัญชี Line สำเร็จ'
+                : 'เชื่อมบัญชี Line ไปที่ปูชิดา'}
+            </h2>
             {hasLinkAccount ? (
-              <div className="relative flex items-center justify-center text-green-300 rounded-full">
-                <svg xmlns="http://www.w3.org/2000/svg" className="w-24 h-24" viewBox="0 0 20 20" fill="currentColor">
+              <div className="relative flex items-center justify-center text-green-700 rounded-full">
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  className="w-24 h-24"
+                  viewBox="0 0 20 20"
+                  fill="currentColor"
+                >
                   <path
                     fillRule="evenodd"
                     d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z"
@@ -198,22 +243,26 @@ function App(): JSX.Element {
                 alt="line profile image"
               />
             )}
-            <p className="text-lg text-center text-gray-500">{hasLinkAccount ? 'โปรดปิดหน้าต่างนี้' : userProfile?.displayName}</p>
+            <p className="text-lg text-center text-gray-500">
+              {hasLinkAccount ? 'โปรดปิดหน้าต่างนี้' : userProfile?.displayName}
+            </p>
           </section>
           {!showLinkAccount ? (
             <>
-              <h3 className="text-lg font-medium text-warm-gray-900">กรุณากรอกหมายเลขมือถือ เพื่อรับรหัส OTP</h3>
+              <h3 className="text-lg font-medium text-warm-gray-900">
+                กรุณากรอกหมายเลขมือถือ เพื่อรับรหัส OTP
+              </h3>
               <form className="flex-1 h-full max-w-sm px-6 space-y-4">
                 {!hasRequestOtp ? (
                   <>
                     <div>
                       <label htmlFor="phone-number" className="sr-only">
-                        Phone Number
+                        เบอร์มือถือ
                       </label>
                       <div className="relative mt-1 rounded">
                         <div className="absolute inset-y-0 left-0 flex items-center border-r border-gray-300">
                           <label htmlFor="country" className="sr-only">
-                            Country
+                            รหัสประเทศ
                           </label>
                           <select
                             id="country"
@@ -224,7 +273,10 @@ function App(): JSX.Element {
                           >
                             {countries.map((country) => {
                               return (
-                                <option key={country.isoCode} value={country.dialCode}>
+                                <option
+                                  key={country.isoCode}
+                                  value={country.dialCode}
+                                >
                                   {country.isoCode} {country.dialCode}
                                 </option>
                               )
@@ -248,7 +300,10 @@ function App(): JSX.Element {
                     </div>
 
                     <div>
-                      <button onClick={(e) => requestOtp(e)} className="btn-primary">
+                      <button
+                        onClick={(e) => requestOtp(e)}
+                        className="btn-primary"
+                      >
                         ขอรหัส OTP
                       </button>
                     </div>
@@ -256,7 +311,7 @@ function App(): JSX.Element {
                 ) : (
                   <>
                     <div>
-                      <label htmlFor="otp" className="block text-sm text-gray-700 md:text-base">
+                      <label htmlFor="otp" className="sr-only">
                         รหัส OTP 6 หลัก
                       </label>
                       <div className="relative mt-1 rounded">
@@ -294,19 +349,22 @@ function App(): JSX.Element {
           ) : (
             <section>
               {!hasLinkAccount && (
-                <button onClick={(e) => linkAccount(e)} className="btn-secondary">
+                <button
+                  onClick={(e) => linkAccount(e)}
+                  className="btn-secondary"
+                >
                   เชื่อมต่อบัญชี
                 </button>
               )}
             </section>
           )}
         </div>
-        <footer className="fixed bottom-0 w-full mb-4 text-center safe-area-bottom">
-          <button className="btn-light" onClick={() => close()}>
-            ปิดหน้านี้
-          </button>
-        </footer>
       </div>
+      <footer className="fixed bottom-0 w-full mb-8 text-center safe-area-bottom">
+        <button className="btn-light" onClick={() => close()}>
+          ปิดหน้านี้
+        </button>
+      </footer>
       <Toaster position="top-center" />
     </>
   )
