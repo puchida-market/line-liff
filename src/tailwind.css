@@ -11,6 +11,9 @@
   .btn-secondary {
     @apply inline-flex items-center justify-center px-12 py-3 text-base font-medium text-white bg-gray-700 border border-transparent rounded shadow hover:bg-gray-900;
   }
+  .btn-disabled {
+    @apply inline-flex items-center justify-center px-12 py-3 text-base font-medium text-gray-100 bg-gray-300 border border-transparent rounded shadow cursor-not-allowed select-none;
+  }
   .btn-light {
     @apply px-8 py-3 font-bold text-center text-gray-700 bg-gray-300 rounded shadow hover:bg-gray-700 hover:text-white;
   }

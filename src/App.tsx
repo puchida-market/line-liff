@@ -108,6 +108,10 @@ function App(): JSX.Element {
     e: MouseEvent<HTMLButtonElement, globalThis.MouseEvent>
   ): Promise<void> {
     e.preventDefault()
+    if (!phoneNumber.length) {
+      toast.error('โปรดกรอกหมายเลขมือถือ')
+      return
+    }
     const toastId = toast.loading('กำลังส่งคำขอ OTP')
     const result = await axios.post(
       `${import.meta.env.VITE_CLOUD_FUNCTIONS_URL}/requestOtp`,
@@ -301,8 +305,13 @@ function App(): JSX.Element {
 
                     <div>
                       <button
+                        disabled={phoneNumber.length < 10}
                         onClick={(e) => requestOtp(e)}
-                        className="btn-primary"
+                        className={
+                          phoneNumber.length < 10
+                            ? 'btn-disabled'
+                            : 'btn-primary'
+                        }
                       >
                         ขอรหัส OTP
                       </button>
@@ -333,11 +342,14 @@ function App(): JSX.Element {
                     </div>
                     <div>
                       <button
+                        disabled={otpNumber.length < 6}
                         onClick={(e) => {
                           e.preventDefault()
                           verifyOtp()
                         }}
-                        className="btn-primary"
+                        className={
+                          otpNumber.length < 6 ? 'btn-disabled' : 'btn-primary'
+                        }
                       >
                         ยืนยันรหัส OTP
                       </button>
