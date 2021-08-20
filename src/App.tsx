@@ -94,8 +94,6 @@ function App(): JSX.Element {
           })
           .then((otp) => {
             setOtpNumber(String(otp?.code))
-            // Automatically submit the form when an OTP is obtained.
-            // if (form) form.submit()
           })
           .catch((err) => {
             console.log(err)
@@ -272,7 +270,9 @@ function App(): JSX.Element {
                             id="country"
                             name="country"
                             defaultValue="+66"
-                            onChange={(e) => setCountryCode(e.target.value)}
+                            onChange={(e) =>
+                              setCountryCode(e.currentTarget.value)
+                            }
                             className="h-full py-0 pl-3 pr-3 text-gray-700 bg-transparent border-transparent rounded focus:ring-0 focus:border-transparent sm:text-sm"
                           >
                             {countries.map((country) => {
@@ -295,7 +295,9 @@ function App(): JSX.Element {
                           maxLength={12}
                           required
                           onKeyPress={(e) => numericCheck(e, true)}
-                          onChange={(e) => setPhoneNumber(e.target.value)}
+                          onChange={(e) =>
+                            setPhoneNumber(e.currentTarget.value)
+                          }
                           autoComplete="tel-local"
                           className="pl-28 input-text"
                           placeholder="081 111 1111"
@@ -335,7 +337,7 @@ function App(): JSX.Element {
                           required
                           value={otpNumber}
                           onKeyPress={(e) => numericCheck(e, true)}
-                          onChange={(e) => setOtpNumber(e.target.value)}
+                          onChange={(e) => setOtpNumber(e.currentTarget.value)}
                           className="text-center input-text"
                         />
                       </div>
