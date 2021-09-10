@@ -252,7 +252,9 @@ function App(): JSX.Element {
           {!showLinkAccount ? (
             <>
               <h3 className="text-lg font-medium text-warm-gray-900">
-                กรุณากรอกหมายเลขมือถือ เพื่อรับรหัส OTP
+                {!hasRequestOtp
+                  ? 'กรอกหมายเลขมือถือ ที่สมัครใช้งานใน ปูชิดา'
+                  : 'กรอกรหัส OTP 6 หลัก'}
               </h3>
               <form className="flex-1 h-full max-w-sm px-6 space-y-4">
                 {!hasRequestOtp ? (
