@@ -1,11 +1,11 @@
-import { useEffect, useRef, useState, MouseEvent } from 'react'
 import Loading from '@components/LoadingIndicator'
 import liff from '@line/liff'
-import logo from './logo.svg'
-import countries from './data/countries.json'
-import { Helmet } from 'react-helmet-async'
 import axios from 'axios'
+import { MouseEvent, useEffect, useRef, useState } from 'react'
+import { Helmet } from 'react-helmet-async'
 import toast, { Toaster } from 'react-hot-toast'
+import countries from './data/countries.json'
+import logo from './logo.svg'
 import { numericCheck } from './utils/validator'
 
 interface LineProfile {
@@ -47,7 +47,7 @@ function App(): JSX.Element {
       const idToken = liff.getIDToken()
       try {
         const result = await axios.get(
-          `${import.meta.env.VITE_CLOUD_FUNCTIONS_URL}/linkAccountStatus`,
+          `${import.meta.env.VITE_CLOUD_FUNCTIONS_URL}/api/linkAccountStatus`,
           {
             headers: {
               Authorization: `Bearer ${idToken}`
@@ -112,7 +112,7 @@ function App(): JSX.Element {
     }
     const toastId = toast.loading('กำลังส่งคำขอ OTP')
     const result = await axios.post(
-      `${import.meta.env.VITE_CLOUD_FUNCTIONS_URL}/requestOtp`,
+      `${import.meta.env.VITE_CLOUD_FUNCTIONS_URL}/api/requestOtp`,
       {
         phoneNumber: `${countryCode}${phoneNumber}`
       }
@@ -134,7 +134,7 @@ function App(): JSX.Element {
   async function verifyOtp(): Promise<void> {
     const toastId = toast.loading('ระบบกำลังตรวจสอบ OTP')
     const result = await axios.post(
-      `${import.meta.env.VITE_CLOUD_FUNCTIONS_URL}/verifyOtp`,
+      `${import.meta.env.VITE_CLOUD_FUNCTIONS_URL}/api/verifyOtp`,
       {
         sid: responseSid,
         otp: otpNumber
@@ -155,7 +155,7 @@ function App(): JSX.Element {
     const toastId = toast.loading('กำลังเชื่อมต่อบัญชีปูชิดา โปรดรอซักครู่')
     try {
       const result = await axios.post(
-        `${import.meta.env.VITE_CLOUD_FUNCTIONS_URL}/linkLineAccount`,
+        `${import.meta.env.VITE_CLOUD_FUNCTIONS_URL}/api/linkLineAccount`,
         {
           phoneNumber
         },

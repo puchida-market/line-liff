@@ -5,7 +5,7 @@ on:
       - develop
 env:
   RECAPTCHA_SITE_SECRET: "6Lc0mXwaAAAAAAllRoZlUf5M3DyhUizGidWdxl0X"
-  VITE_CLOUD_FUNCTIONS_URL: "https://asia-southeast1-puchida-develop.cloudfunctions.net"
+  VITE_CLOUD_FUNCTIONS_URL: "https://staging.puchida.com"
 
 jobs:
   build:
