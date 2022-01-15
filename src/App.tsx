@@ -64,7 +64,7 @@ function App(): JSX.Element {
         if (error instanceof Error) {
           console.error(error)
           toast.error(
-            'ไม่พบบัญชีผู้ใช้ โปรดติดต่อเจ้าหน้าที่สำหรับความช่วยเหลือ'
+            'ไม่พบบัญชีผู้ใช้ โปรดลงทะเบียนที่ปูชิดาก่อนเชื่อมบัญชี Line'
           )
           return
         }
@@ -304,7 +304,7 @@ function App(): JSX.Element {
             <>
               <h3 className="text-lg font-medium text-warm-gray-900">
                 {!hasRequestOtp
-                  ? 'กรอกหมายเลขมือถือ ที่สมัครใช้งานใน ปูชิดา'
+                  ? 'กรอกหมายเลขมือถือ ที่สมัครใช้งานบน ปูชิดา'
                   : 'กรอกรหัส OTP 6 หลัก'}
               </h3>
               <form className="flex-1 h-full max-w-sm px-6 space-y-4">
