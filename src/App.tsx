@@ -251,7 +251,7 @@ function App(): JSX.Element {
       <div
         className={`${
           showLanding ? 'block' : 'hidden'
-        } min-h-screen overflow-hidden bg-white`}
+        } min-h-screen h-full overflow-hidden bg-white`}
       >
         <div className="flex flex-col px-6 py-12 mx-auto space-y-4 text-center">
           <section className="flex flex-col items-center justify-center space-y-2">
@@ -347,7 +347,7 @@ function App(): JSX.Element {
                           id="phone-number"
                           maxLength={12}
                           required
-                          onKeyPress={(e) => numericCheck(e, true)}
+                          onKeyPress={(e) => numericCheck(e, false)}
                           onChange={(e) =>
                             setPhoneNumber(e.currentTarget.value)
                           }
@@ -389,7 +389,7 @@ function App(): JSX.Element {
                           pattern="\d{6}"
                           required
                           value={otpNumber}
-                          onKeyPress={(e) => numericCheck(e, true)}
+                          onKeyPress={(e) => numericCheck(e, false)}
                           onChange={(e) => setOtpNumber(e.currentTarget.value)}
                           className="text-center input-text"
                         />
@@ -427,7 +427,7 @@ function App(): JSX.Element {
           )}
         </div>
       </div>
-      <footer className="fixed bottom-0 w-full mb-8 text-center safe-area-bottom">
+      <footer className="w-full mt-auto mb-8 text-center safe-area-bottom">
         <button className="btn-light" onClick={() => close()}>
           ปิดหน้านี้
         </button>
