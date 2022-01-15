@@ -47,7 +47,9 @@ function App(): JSX.Element {
       const idToken = liff.getIDToken()
       try {
         const result = await axios.get(
-          `${import.meta.env.VITE_CLOUD_FUNCTIONS_URL}/api/linkAccountStatus`,
+          `${
+            import.meta.env.VITE_CLOUD_FUNCTIONS_URL
+          }/api/line/linkAccountStatus`,
           {
             headers: {
               Authorization: `Bearer ${idToken}`
@@ -61,13 +63,14 @@ function App(): JSX.Element {
       } catch (error) {
         if (error instanceof Error) {
           console.error(error)
-          toast.error(error.message)
+          toast.error(
+            'ไม่พบบัญชีผู้ใช้ โปรดติดต่อเจ้าหน้าที่สำหรับความช่วยเหลือ'
+          )
           return
         }
       } finally {
         setShowLanding(true)
       }
-      // TODO: remove loading screen
     }
     if (liff) {
       checkLogin()
@@ -112,7 +115,7 @@ function App(): JSX.Element {
     }
     const toastId = toast.loading('กำลังส่งคำขอ OTP')
     const result = await axios.post(
-      `${import.meta.env.VITE_CLOUD_FUNCTIONS_URL}/api/requestOtp`,
+      `${import.meta.env.VITE_CLOUD_FUNCTIONS_URL}/api/line/requestOtp`,
       {
         phoneNumber: `${countryCode}${phoneNumber}`
       }
@@ -134,7 +137,7 @@ function App(): JSX.Element {
   async function verifyOtp(): Promise<void> {
     const toastId = toast.loading('ระบบกำลังตรวจสอบ OTP')
     const result = await axios.post(
-      `${import.meta.env.VITE_CLOUD_FUNCTIONS_URL}/api/verifyOtp`,
+      `${import.meta.env.VITE_CLOUD_FUNCTIONS_URL}/api/line/verifyOtp`,
       {
         sid: responseSid,
         otp: otpNumber
@@ -155,7 +158,7 @@ function App(): JSX.Element {
     const toastId = toast.loading('กำลังเชื่อมต่อบัญชีปูชิดา โปรดรอซักครู่')
     try {
       const result = await axios.post(
-        `${import.meta.env.VITE_CLOUD_FUNCTIONS_URL}/api/linkLineAccount`,
+        `${import.meta.env.VITE_CLOUD_FUNCTIONS_URL}/api/line/linkLineAccount`,
         {
           phoneNumber
         },
@@ -167,7 +170,7 @@ function App(): JSX.Element {
       )
       if (result.status === 204) {
         toast.error(
-          'ไม่พบบัญชีนี้ในปูชิดา โปรดแน่ใจว่าได้กรอกเบอร์มือถือในบัญชีปูชิดาแล้ว',
+          'ไม่พบบัญชีนี้ในปูชิดา โปรดกรอกเบอร์มือถือในบัญชีปูชิดาของท่าน',
           { id: toastId }
         )
         return
@@ -187,7 +190,44 @@ function App(): JSX.Element {
     } catch (error) {
       if (error instanceof Error) {
         console.error(error)
-        toast.error(error.message)
+        toast.error('ไม่พบบัญชีผู้ใช้ โปรดติดต่อเจ้าหน้าที่สำหรับความช่วยเหลือ')
+      }
+    }
+  }
+
+  async function unlinkAccount(
+    e: MouseEvent<HTMLButtonElement, globalThis.MouseEvent>
+  ): Promise<void> {
+    e.preventDefault()
+    try {
+      const result = await axios.delete(
+        `${import.meta.env.VITE_CLOUD_FUNCTIONS_URL}/api/line/linkLineAccount`,
+        {
+          headers: {
+            Authorization: `Bearer ${liff.getIDToken()}`
+          }
+        }
+      )
+      if (result.status === 204) {
+        toast.error('ไม่พบบัญชีนี้ในปูชิดา')
+        return
+      }
+      if (result?.status === 200) {
+        toast.success('ยกเลิกการเชื่อมต่อบัญชีสำเร็จ')
+        setHasLinkAccount(true)
+        liff.sendMessages([
+          {
+            type: 'text',
+            text: 'คุณได้ยกเลิกเชื่อมต่อบัญชี Line กับ ปูชิดา 😔'
+          }
+        ])
+      } else {
+        toast.error(result?.data?.message)
+      }
+    } catch (error) {
+      if (error instanceof Error) {
+        console.error(error)
+        toast.error('ไม่พบบัญชีผู้ใช้ โปรดติดต่อเจ้าหน้าที่สำหรับความช่วยเหลือ')
       }
     }
   }
@@ -246,7 +286,18 @@ function App(): JSX.Element {
               />
             )}
             <p className="text-lg text-center text-gray-500">
-              {hasLinkAccount ? 'โปรดปิดหน้าต่างนี้' : userProfile?.displayName}
+              {hasLinkAccount ? (
+                <>
+                  <button
+                    onClick={(e) => unlinkAccount(e)}
+                    className="btn-secondary"
+                  >
+                    ยกเลิกเชื่อมต่อบัญชี
+                  </button>
+                </>
+              ) : (
+                userProfile?.displayName
+              )}
             </p>
           </section>
           {!showLinkAccount ? (
@@ -301,7 +352,7 @@ function App(): JSX.Element {
                             setPhoneNumber(e.currentTarget.value)
                           }
                           autoComplete="tel-local"
-                          className="pl-28 input-text"
+                          className="text-center input-text"
                           placeholder="081 111 1111"
                         />
                       </div>
