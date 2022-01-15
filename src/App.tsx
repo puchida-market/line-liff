@@ -121,7 +121,7 @@ function App(): JSX.Element {
       }
     )
     if (result?.data?.success) {
-      setResponseSid(result?.data?.message?.sid)
+      setResponseSid(result?.data?.message)
       toast.success(`ส่งรหัส OTP ไปที่หมายเลข ${phoneNumber} โปรดตรวจสอบ SMS`, {
         id: toastId
       })
