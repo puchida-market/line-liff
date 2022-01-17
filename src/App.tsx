@@ -135,7 +135,6 @@ function App(): JSX.Element {
   }
 
   async function verifyOtp(): Promise<void> {
-    const toastId = toast.loading('ระบบกำลังตรวจสอบ OTP')
     const result = await axios.post(
       `${import.meta.env.VITE_CLOUD_FUNCTIONS_URL}/api/line/verifyOtp`,
       {
@@ -144,10 +143,9 @@ function App(): JSX.Element {
       }
     )
     if (result?.data?.success) {
-      toast.success(`ยืนยันหมายเลขมือถือสำเร็จ`, { id: toastId })
       setShowLinkAccount(true)
     } else {
-      toast.error('รหัส OTP ไม่ถูกต้อง', { id: toastId })
+      toast.error('รหัส OTP ไม่ถูกต้อง')
     }
   }
 
@@ -155,7 +153,7 @@ function App(): JSX.Element {
     e: MouseEvent<HTMLButtonElement, globalThis.MouseEvent>
   ): Promise<void> {
     e.preventDefault()
-    const toastId = toast.loading('กำลังเชื่อมต่อบัญชีปูชิดา โปรดรอซักครู่')
+    const toastId = toast.loading('กำลังเชื่อมต่อบัญชี โปรดรอซักครู่')
     try {
       const result = await axios.post(
         `${import.meta.env.VITE_CLOUD_FUNCTIONS_URL}/api/line/linkLineAccount`,
@@ -310,7 +308,7 @@ function App(): JSX.Element {
               <form className="flex-1 h-full max-w-sm px-6 space-y-4">
                 {!hasRequestOtp ? (
                   <>
-                    <div>
+                    <div className="mx-auto">
                       <label htmlFor="phone-number" className="sr-only">
                         เบอร์มือถือ
                       </label>
