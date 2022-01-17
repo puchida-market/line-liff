@@ -213,7 +213,7 @@ function App(): JSX.Element {
       if (result?.status === 200) {
         toast.success('ยกเลิกการเชื่อมต่อบัญชีสำเร็จ')
         setShowLinkAccount(true)
-        setHasLinkAccount(true)
+        setHasLinkAccount(false)
         liff.sendMessages([
           {
             type: 'text',
