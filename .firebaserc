@@ -1,6 +1,6 @@
 {
   "projects": {
-    "default": "puchida-develop",
+    "default": "puchida-production",
     "develop": "puchida-develop",
     "production": "puchida-production"
   }
