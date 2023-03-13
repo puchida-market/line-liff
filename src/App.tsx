@@ -5,7 +5,7 @@ import { MouseEvent, useEffect, useRef, useState } from 'react'
 import { Helmet } from 'react-helmet-async'
 import toast, { Toaster } from 'react-hot-toast'
 import countries from './data/countries.json'
-import logo from './logo.svg'
+import logo from './amuletdd-logo.jpg'
 import { numericCheck } from './utils/validator'
 
 interface LineProfile {
@@ -240,24 +240,24 @@ function App(): JSX.Element {
   return (
     <>
       <Helmet>
-        <title>Miss Puchida</title>
+        <title>AmuletDD Notify</title>
       </Helmet>
       {!showLanding && (
-        <div className="min-h-screen overflow-hidden bg-white ">
+        <div className="min-h-screen overflow-hidden">
           <Loading />
         </div>
       )}
       <div
         className={`${
           showLanding ? 'block' : 'hidden'
-        } min-h-screen h-full overflow-hidden bg-white`}
+        } min-h-screen h-full overflow-hidden`}
       >
         <div className="flex flex-col px-6 py-12 mx-auto space-y-4 text-center">
           <section className="flex flex-col items-center justify-center space-y-2">
             <div className="flex justify-center">
               <img src={logo} alt="logo" className="object-cover" width={120} />
             </div>
-            <h2 className="py-4 text-2xl font-bold text-gray-700">
+            <h2 className="py-4 text-2xl font-bold">
               {hasLinkAccount
                 ? 'เชื่อมบัญชี Line สำเร็จ'
                 : 'เชื่อมบัญชี Line ไปที่อมูเลตดีดี'}
@@ -284,7 +284,7 @@ function App(): JSX.Element {
                 alt="line profile image"
               />
             )}
-            <p className="text-lg text-center text-gray-500">
+            <p className="text-lg text-center text-gray-700">
               {hasLinkAccount ? (
                 <>
                   <button
@@ -306,10 +306,10 @@ function App(): JSX.Element {
                   ? 'กรอกหมายเลขมือถือ ที่สมัครใช้งานบน อมูเลตดีดี'
                   : 'กรอกรหัส OTP 6 หลัก'}
               </h3>
-              <form className="flex-1 h-full max-w-sm px-6 space-y-4">
+              <form className="h-full px-6 space-y-4">
                 {!hasRequestOtp ? (
                   <>
-                    <div className="mx-auto">
+                    <div className="mx-auto max-w-sm">
                       <label htmlFor="phone-number" className="sr-only">
                         เบอร์มือถือ
                       </label>
@@ -325,7 +325,7 @@ function App(): JSX.Element {
                             onChange={(e) =>
                               setCountryCode(e.currentTarget.value)
                             }
-                            className="h-full py-0 pl-3 pr-3 text-gray-700 bg-transparent border-transparent rounded focus:ring-0 focus:border-transparent sm:text-sm"
+                            className="h-full py-0 pl-3 pr-3 text-gray-800 bg-transparent border-transparent rounded focus:ring-0 focus:border-transparent sm:text-sm"
                           >
                             {countries.map((country) => {
                               return (

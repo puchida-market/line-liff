@@ -2,9 +2,16 @@
 @import 'tailwindcss/components';
 @import 'tailwindcss/utilities';
 
+@layer base {
+  body {
+    background-color: #faf1e0;
+    color: #996666;
+  }
+}
+
 @layer components {
   .btn-primary {
-    @apply inline-flex items-center justify-center px-12 py-3 text-base font-medium text-white shadow bg-[#820002] border border-transparent rounded hover:bg-[#3b0d00];
+    @apply inline-flex items-center justify-center px-12 py-3 text-base font-medium text-white shadow bg-primary border border-transparent rounded hover:bg-primary-dark;
   }
   .btn-secondary {
     @apply inline-flex items-center justify-center px-12 py-3 text-base font-medium text-white bg-gray-700 border border-transparent rounded shadow hover:bg-gray-900;
@@ -13,10 +20,10 @@
     @apply inline-flex items-center justify-center px-12 py-3 text-base font-medium text-gray-100 bg-gray-300 border border-transparent rounded shadow cursor-not-allowed select-none;
   }
   .btn-light {
-    @apply px-8 py-3 font-bold text-center text-gray-700 bg-gray-300 rounded shadow hover:bg-gray-700 hover:text-white;
+    @apply px-8 py-3 font-bold text-center text-primary bg-gray-300 rounded shadow hover:bg-primary-dark hover:text-white;
   }
   .input-text {
-    @apply block w-full border-gray-300 placeholder-gray-300 tracking-wider rounded focus:ring-[#b22222] focus:border-[#b22222] sm:text-sm;
+    @apply block w-full border-gray-300 placeholder-gray-300 tracking-wider rounded focus:ring-primary focus:border-primary sm:text-sm;
   }
 }
 
