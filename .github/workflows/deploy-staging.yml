@@ -1,8 +1,8 @@
-name: Deploy to Develop
+name: Deploy to Staging
 on:
   push:
     branches:
-      - develop
+      - staging
 env:
   RECAPTCHA_SITE_SECRET: "6Lc0mXwaAAAAAAllRoZlUf5M3DyhUizGidWdxl0X"
   VITE_CLOUD_FUNCTIONS_URL: "https://staging.amuletdd.com"
