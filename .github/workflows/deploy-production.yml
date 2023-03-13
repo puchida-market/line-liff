@@ -6,6 +6,7 @@ on:
 env:
   RECAPTCHA_SITE_SECRET: "6Lc0mXwaAAAAAAllRoZlUf5M3DyhUizGidWdxl0X"
   VITE_CLOUD_FUNCTIONS_URL: "https://amuletdd.com"
+  VITE_LIFF_ID: 1655232598-qkxryLE9
 
 jobs:
   build:
