@@ -1772,11 +1772,6 @@
   resolved "https://registry.yarnpkg.com/@types/semver/-/semver-7.3.13.tgz#da4bfd73f49bd541d28920ab0e2bf0ee80f71c91"
   integrity sha512-21cFJr9z3g5dW8B0CVI9g2O9beqaThGQ6ZFBqHfwhzLDKUxaqTIy3vnfah/UPkfOiF2pLq+tGz+W8RyCskuslw==
 
-"@types/webappsec-credential-management@^0.6.4":
-  version "0.6.4"
-  resolved "https://registry.yarnpkg.com/@types/webappsec-credential-management/-/webappsec-credential-management-0.6.4.tgz#1c60dc82c12aa089055b95ddac13e9297ecd9508"
-  integrity sha512-9ZLG4/avKS74jxhwjk6f8jUMfERFQKfBfdH+CL/1pxYsJtF8IM1lwwZhKZeV2eae6pNQGj8QcxJjsKBRno/Frg==
-
 "@typescript-eslint/eslint-plugin@^5.54.1":
   version "5.54.1"
   resolved "https://registry.yarnpkg.com/@typescript-eslint/eslint-plugin/-/eslint-plugin-5.54.1.tgz#0c5091289ce28372e38ab8d28e861d2dbe1ab29e"

@@ -10,7 +10,7 @@
     "isolatedModules": true,
     "jsx": "react-jsx",
     "lib": ["dom", "dom.iterable", "esnext"],
-    "types": ["vite/client", "node", "@types/webappsec-credential-management"],
+    "types": ["vite/client", "node"],
     "module": "esnext",
     "moduleResolution": "node",
     "noEmit": true,

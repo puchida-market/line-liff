@@ -28,50 +28,50 @@ function App(): JSX.Element {
   const [countryCode, setCountryCode] = useState<string>('+66')
 
   useEffect(() => {
-    if (otpNumber.length === 6) {
-      verifyOtp()
-    }
-  }, [otpNumber])
-
-  useEffect(() => {
     const checkLogin = async () => {
-      await liff?.init({ liffId: import.meta.env.VITE_LIFF_ID })
-      if (!liff?.isLoggedIn()) {
-        liff?.login()
-        return
-      }
-      await liff.ready
-      const getProfile = await liff.getProfile()
-      const email = liff.getDecodedIDToken()?.email
-      setUserProfile({ ...getProfile, email })
-      const idToken = liff.getIDToken()
-      try {
-        const result = await axios.get(
-          `${
-            import.meta.env.VITE_CLOUD_FUNCTIONS_URL
-          }/api/line/linkAccountStatus`,
-          {
-            headers: {
-              Authorization: `Bearer ${idToken}`
-            }
+      liff
+        ?.init({ liffId: import.meta.env.VITE_LIFF_ID })
+        .then(async () => {
+          if (!liff?.isLoggedIn()) {
+            liff?.login()
+            return
           }
-        )
-        if (result.status === 200) {
-          setHasLinkAccount(true)
-          setShowLinkAccount(true)
-        }
-      } catch (error) {
-        if (error instanceof Error) {
+          const idToken = liff.getIDToken()
+          const profile = await liff.getProfile()
+          const email = liff.getDecodedIDToken()?.email
+          setUserProfile({ ...profile, email })
+
+          try {
+            const result = await axios.get(
+              `${import.meta.env.VITE_API_URL}/api/line/linkAccountStatus`,
+              {
+                headers: {
+                  Authorization: `Bearer ${idToken}`
+                }
+              }
+            )
+            if (result.status === 200) {
+              setHasLinkAccount(true)
+              setShowLinkAccount(true)
+            }
+          } catch (error) {
+            if (error instanceof Error) {
+              console.error(error)
+              toast.error(
+                'ไม่พบบัญชีผู้ใช้ โปรดลงทะเบียนที่อมูเลตดีดีก่อนเชื่อมบัญชี Line'
+              )
+              return
+            }
+          } finally {
+            setShowLanding(true)
+          }
+        })
+        .catch((error) => {
+          toast.error(error.message)
           console.error(error)
-          toast.error(
-            'ไม่พบบัญชีผู้ใช้ โปรดลงทะเบียนที่อมูเลตดีดีก่อนเชื่อมบัญชี Line'
-          )
-          return
-        }
-      } finally {
-        setShowLanding(true)
-      }
+        })
     }
+
     if (liff) {
       checkLogin()
     }
@@ -115,7 +115,7 @@ function App(): JSX.Element {
     }
     const toastId = toast.loading('กำลังส่งคำขอ OTP')
     const result = await axios.post(
-      `${import.meta.env.VITE_CLOUD_FUNCTIONS_URL}/api/line/requestOtp`,
+      `${import.meta.env.VITE_API_URL}/api/line/requestOtp`,
       {
         phoneNumber: `${countryCode}${phoneNumber}`
       }
@@ -136,7 +136,7 @@ function App(): JSX.Element {
 
   async function verifyOtp(): Promise<void> {
     const result = await axios.post(
-      `${import.meta.env.VITE_CLOUD_FUNCTIONS_URL}/api/line/verifyOtp`,
+      `${import.meta.env.VITE_API_URL}/api/line/verifyOtp`,
       {
         sid: responseSid,
         otp: otpNumber
@@ -156,7 +156,7 @@ function App(): JSX.Element {
     const toastId = toast.loading('กำลังเชื่อมต่อบัญชี โปรดรอซักครู่')
     try {
       const result = await axios.post(
-        `${import.meta.env.VITE_CLOUD_FUNCTIONS_URL}/api/line/linkLineAccount`,
+        `${import.meta.env.VITE_API_URL}/api/line/linkLineAccount`,
         {
           phoneNumber
         },
@@ -199,7 +199,7 @@ function App(): JSX.Element {
     e.preventDefault()
     try {
       const result = await axios.delete(
-        `${import.meta.env.VITE_CLOUD_FUNCTIONS_URL}/api/line/linkLineAccount`,
+        `${import.meta.env.VITE_API_URL}/api/line/linkLineAccount`,
         {
           headers: {
             Authorization: `Bearer ${liff.getIDToken()}`
@@ -346,7 +346,7 @@ function App(): JSX.Element {
                           id="phone-number"
                           maxLength={12}
                           required
-                          onKeyPress={(e) => numericCheck(e, false)}
+                          onKeyUp={(e) => numericCheck(e, false)}
                           onChange={(e) =>
                             setPhoneNumber(e.currentTarget.value)
                           }
@@ -373,7 +373,7 @@ function App(): JSX.Element {
                   </>
                 ) : (
                   <>
-                    <div>
+                    <div className="mx-auto max-w-sm">
                       <label htmlFor="otp" className="sr-only">
                         รหัส OTP 6 หลัก
                       </label>
@@ -388,7 +388,7 @@ function App(): JSX.Element {
                           pattern="\d{6}"
                           required
                           value={otpNumber}
-                          onKeyPress={(e) => numericCheck(e, false)}
+                          onKeyUp={(e) => numericCheck(e, false)}
                           onChange={(e) => setOtpNumber(e.currentTarget.value)}
                           className="text-center input-text"
                         />

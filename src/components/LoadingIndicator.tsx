@@ -1,6 +1,6 @@
 export default function LandingIndicator(): JSX.Element {
   return (
-    <div className="grid w-full h-full min-h-screen grid-cols-1 grid-rows-1 text-[#b22222] place-items-center">
+    <div className="grid w-full h-full min-h-screen grid-cols-1 grid-rows-1 text-primary place-items-center">
       <svg
         xmlns="http://www.w3.org/2000/svg"
         width="80"
