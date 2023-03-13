@@ -35,7 +35,7 @@ function App(): JSX.Element {
 
   useEffect(() => {
     const checkLogin = async () => {
-      await liff?.init({ liffId: '1655232598-75GlOzq5' })
+      await liff?.init({ liffId: '1655232598-qkxryLE9' })
       if (!liff?.isLoggedIn()) {
         liff?.login()
         return
